@@ -18,11 +18,10 @@ extension TimeInterval {
         return TimeInterval(minutes: minutes)
     }
 
-
     static func hours(_ hours: Double) -> TimeInterval {
         return TimeInterval(hours: hours)
     }
-    
+
     static func days(_ days: Double) -> TimeInterval {
         return TimeInterval(days: days)
     }
@@ -45,6 +44,10 @@ extension TimeInterval {
 
     var hours: Double {
         return minutes / 60.0
+    }
+
+    var days: Double {
+        return hours / 24.0
     }
 
 }

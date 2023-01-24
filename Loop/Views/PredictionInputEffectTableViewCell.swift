@@ -14,19 +14,21 @@ class PredictionInputEffectTableViewCell: UITableViewCell {
 
     @IBOutlet weak var subtitleLabel: UILabel!
 
-    override func didMoveToSuperview() {
-        super.didMoveToSuperview()
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        contentView.layoutMargins.left = separatorInset.left
         contentView.layoutMargins.right = separatorInset.left
     }
-    
+
     var enabled: Bool = true {
         didSet {
             if enabled {
                 titleLabel.textColor = UIColor.darkText
                 subtitleLabel.textColor = UIColor.darkText
             } else {
-                titleLabel.textColor = UIColor.secondaryLabelColor
-                subtitleLabel.textColor = UIColor.secondaryLabelColor
+                titleLabel.textColor = UIColor.secondaryLabel
+                subtitleLabel.textColor = UIColor.secondaryLabel
             }
         }
     }

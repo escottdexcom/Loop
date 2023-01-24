@@ -14,7 +14,7 @@ import LoopKit
 private enum InsulinCorrection {
     case inRange
     case aboveRange(min: GlucoseValue, correcting: GlucoseValue, minTarget: HKQuantity, units: Double)
-    case entirelyBelowRange(correcting: GlucoseValue, minTarget: HKQuantity, units: Double)
+    case entirelyBelowRange(min: GlucoseValue, minTarget: HKQuantity, units: Double)
     case suspend(min: GlucoseValue)
 }
 
@@ -25,24 +25,14 @@ extension InsulinCorrection {
         switch self {
         case .aboveRange(min: _, correcting: _, minTarget: _, units: let units):
             return units
-        case .entirelyBelowRange(correcting: _, minTarget: _, units: let units):
+        case .entirelyBelowRange(min: _, minTarget: _, units: let units):
             return units
         case .inRange, .suspend:
             return 0
         }
     }
     
-    fileprivate func asBolus(
-        partialApplicationFactor: Double,
-        maxBolusUnits: Double,
-        volumeRounder: ((Double) -> Double)?
-    ) -> Double {
-        
-        let partialDose = units * partialApplicationFactor
-        
-        return Swift.min(Swift.max(0, volumeRounder?(partialDose) ?? partialDose),maxBolusUnits)
-    }
-
+    
 
     /// Determines the temp basal over `duration` needed to perform the correction.
     ///
@@ -75,13 +65,15 @@ extension InsulinCorrection {
             duration: duration
         )
     }
-    
+
     private var bolusRecommendationNotice: BolusRecommendationNotice? {
         switch self {
         case .suspend(min: let minimum):
             return .glucoseBelowSuspendThreshold(minGlucose: minimum)
-        case .inRange, .entirelyBelowRange:
-            return nil
+        case .inRange:
+            return .predictedGlucoseInRange
+        case .entirelyBelowRange(min: let min, minTarget: _, units: _):
+            return .allGlucoseBelowTarget(minGlucose: min)
         case .aboveRange(min: let min, correcting: _, minTarget: let target, units: let units):
             if units > 0 && min.quantity < target {
                 return .predictedGlucoseBelowTarget(minGlucose: min)
@@ -91,12 +83,13 @@ extension InsulinCorrection {
         }
     }
 
-    /// Determins the bolus needed to perform the correction
+    /// Determines the bolus needed to perform the correction, subtracting any insulin already scheduled for
+    ///  delivery, such as the remaining portion of an ongoing temp basal.
     ///
     /// - Parameters:
     ///   - pendingInsulin: The number of units expected to be delivered, but not yet reflected in the correction
     ///   - maxBolus: The maximum allowable bolus value in units
-    ///   - volumeRounder: The smallest fraction of a unit supported in bolus delivery
+    ///   - volumeRounder: Method to round computed dose to deliverable volume
     /// - Returns: A bolus recommendation
     fileprivate func asManualBolus(
         pendingInsulin: Double,
@@ -113,17 +106,26 @@ extension InsulinCorrection {
             notice: bolusRecommendationNotice
         )
     }
-}
+    
+    /// Determines the bolus amount to perform a partial application correction
+    ///
+    /// - Parameters:
+    ///   - partialApplicationFactor: The fraction of needed insulin to deliver now
+    ///   - maxBolus: The maximum allowable bolus value in units
+    ///   - volumeRounder: Method to round computed dose to deliverable volume
+    /// - Returns: A bolus recommendation
+    fileprivate func asPartialBolus(
+        partialApplicationFactor: Double,
+        maxBolusUnits: Double,
+        volumeRounder: ((Double) -> Double)?
+    ) -> Double {
 
-struct TempBasalRecommendation: Equatable {
-    let unitsPerHour: Double
-    let duration: TimeInterval
+        let partialDose = units * partialApplicationFactor
 
-    /// A special command which cancels any existing temp basals
-    static var cancel: TempBasalRecommendation {
-        return self.init(unitsPerHour: 0, duration: 0)
+        return Swift.min(Swift.max(0, volumeRounder?(partialDose) ?? partialDose),maxBolusUnits)
     }
 }
+
 
 extension TempBasalRecommendation {
     /// Equates the recommended rate with another rate
@@ -173,12 +175,6 @@ extension TempBasalRecommendation {
         return self
     }
 }
-
-struct AutomaticDoseRecommendation: Equatable {
-    let basalAdjustment: TempBasalRecommendation?
-    let bolusUnits: Double
-}
-
 
 /// Computes a total insulin amount necessary to correct a glucose differential at a given sensitivity
 ///
@@ -232,7 +228,7 @@ extension Collection where Element: GlucoseValue {
     ///   - suspendThreshold: The glucose value below which only suspension is returned
     ///   - sensitivity: The insulin sensitivity at the time of delivery
     ///   - model: The insulin effect model
-    /// - Returns: A correction value in units, if one could be calculated
+    /// - Returns: A correction value in units, or nil if no correction needed
     private func insulinCorrection(
         to correctionRange: GlucoseRangeSchedule,
         at date: Date,
@@ -327,7 +323,7 @@ extension Collection where Element: GlucoseValue {
             }
 
             return .entirelyBelowRange(
-                correcting: min,
+                min: min,
                 minTarget: minGlucoseTargets.lowerBound,
                 units: units
             )
@@ -428,7 +424,7 @@ extension Collection where Element: GlucoseValue {
     ///   - isBasalRateScheduleOverrideActive: A flag describing whether a basal rate schedule override is in progress
     ///   - duration: The duration of the temporary basal
     ///   - continuationInterval: The duration of time before an ongoing temp basal should be continued with a new command
-    /// - Returns: The recommended dosing, if one could be computed
+    /// - Returns: The recommended dosing, or nil if no dose adjustment recommended
     func recommendedAutomaticDose(
         to correctionRange: GlucoseRangeSchedule,
         at date: Date = Date(),
@@ -454,7 +450,7 @@ extension Collection where Element: GlucoseValue {
         ) else {
             return nil
         }
-        
+
         let scheduledBasalRate = basalRates.value(at: date)
         var maxAutomaticBolus = maxAutomaticBolus
 
@@ -463,7 +459,7 @@ extension Collection where Element: GlucoseValue {
         {
             maxAutomaticBolus = 0
         }
-        
+
         var temp: TempBasalRecommendation? = correction.asTempBasal(
             scheduledBasalRate: scheduledBasalRate,
             maxBasalRate: scheduledBasalRate,
@@ -478,8 +474,8 @@ extension Collection where Element: GlucoseValue {
             continuationInterval: continuationInterval,
             scheduledBasalRateMatchesPump: !isBasalRateScheduleOverrideActive
         )
-        
-        let bolusUnits = correction.asBolus(
+
+        let bolusUnits = correction.asPartialBolus(
             partialApplicationFactor: partialApplicationFactor,
             maxBolusUnits: maxAutomaticBolus,
             volumeRounder: volumeRounder
@@ -488,7 +484,7 @@ extension Collection where Element: GlucoseValue {
         if temp != nil || bolusUnits > 0 {
             return AutomaticDoseRecommendation(basalAdjustment: temp, bolusUnits: bolusUnits)
         }
-        
+
         return nil
     }
 
