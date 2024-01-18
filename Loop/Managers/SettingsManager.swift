@@ -32,7 +32,7 @@ class SettingsManager {
 
     var alertMuter: AlertMuter
 
-    var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable?
+    var displayGlucosePreference: DisplayGlucosePreference?
 
     public var latestSettings: StoredSettings
 
@@ -139,7 +139,7 @@ class SettingsManager {
                               controllerDevice: UIDevice.current.controllerDevice,
                               cgmDevice: deviceStatusProvider?.cgmManagerStatus?.device,
                               pumpDevice: deviceStatusProvider?.pumpManagerStatus?.device,
-                              bloodGlucoseUnit: displayGlucoseUnitObservable?.displayGlucoseUnit,
+                              bloodGlucoseUnit: displayGlucosePreference?.unit,
                               automaticDosingStrategy: newLoopSettings.automaticDosingStrategy)
     }
 
@@ -160,7 +160,7 @@ class SettingsManager {
 
         latestSettings = mergedSettings
 
-        if remoteNotificationRegistrationResult == nil && FeatureFlags.remoteOverridesEnabled {
+        if remoteNotificationRegistrationResult == nil && FeatureFlags.remoteCommandsEnabled {
             // remote notification registration not finished
             return
         }
@@ -211,7 +211,7 @@ class SettingsManager {
 // MARK: - SettingsStoreDelegate
 extension SettingsManager: SettingsStoreDelegate {
     func settingsStoreHasUpdatedSettingsData(_ settingsStore: SettingsStore) {
-        remoteDataServicesManager?.settingsStoreHasUpdatedSettingsData(settingsStore)
+        remoteDataServicesManager?.triggerUpload(for: .settings)
     }
 }
 

@@ -21,8 +21,13 @@ enum LoopConstants {
     
     static let validManualGlucoseEntryRange = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 10)...HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 600)
     
+    static let minCarbAbsorptionTime = TimeInterval(minutes: 30)
     static let maxCarbAbsorptionTime = TimeInterval(hours: 8)
+    
+    static let maxCarbEntryPastTime = TimeInterval(hours: (-12))
+    static let maxCarbEntryFutureTime = TimeInterval(hours: 1)
 
+    static let maxOverrideDurationTime = TimeInterval(hours: 24)
     
     // MARK - Display settings
 
@@ -46,9 +51,6 @@ enum LoopConstants {
     
     // Percentage of recommended dose to apply as bolus when using automatic bolus dosing strategy
     static let bolusPartialApplicationFactor = 0.4
-
-    /// The interval over which to aggregate changes in glucose for retrospective correction
-    static let retrospectiveCorrectionGroupingInterval = TimeInterval(minutes: 30)
 
     /// Loop completion aging category limits
     static let completionFreshLimit = TimeInterval(minutes: 6)

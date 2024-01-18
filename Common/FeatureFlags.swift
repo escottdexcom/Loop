@@ -26,7 +26,7 @@ struct FeatureFlagConfiguration: Decodable {
     let observeHealthKitCarbSamplesFromOtherApps: Bool
     let observeHealthKitDoseSamplesFromOtherApps: Bool
     let observeHealthKitGlucoseSamplesFromOtherApps: Bool
-    let remoteOverridesEnabled: Bool
+    let remoteCommandsEnabled: Bool
     let predictedGlucoseChartClampEnabled: Bool
     let scenariosEnabled: Bool
     let sensitivityOverridesEnabled: Bool
@@ -35,8 +35,10 @@ struct FeatureFlagConfiguration: Decodable {
     let siriEnabled: Bool
     let simpleBolusCalculatorEnabled: Bool
     let usePositiveMomentumAndRCForManualBoluses: Bool
-    let dynamicCarbAbsorptionEnabled: Bool
     let adultChildInsulinModelSelectionEnabled: Bool
+    let profileExpirationSettingsViewEnabled: Bool
+    let missedMealNotifications: Bool
+    let allowAlgorithmExperiments: Bool
 
 
     fileprivate init() {
@@ -160,10 +162,10 @@ struct FeatureFlagConfiguration: Decodable {
         #endif
 
         // Swift compiler config is inverse, since the default state is enabled.
-        #if REMOTE_OVERRIDES_DISABLED
-        self.remoteOverridesEnabled = false
+        #if REMOTE_COMMANDS_DISABLED || REMOTE_OVERRIDES_DISABLED //REMOTE_OVERRIDES_DISABLED: backwards compatibility of Loop 3 & prior
+        self.remoteCommandsEnabled = false
         #else
-        self.remoteOverridesEnabled = true
+        self.remoteCommandsEnabled = true
         #endif
         
         #if SCENARIOS_ENABLED
@@ -211,7 +213,25 @@ struct FeatureFlagConfiguration: Decodable {
         self.adultChildInsulinModelSelectionEnabled = false
         #endif
 
-        self.dynamicCarbAbsorptionEnabled = true
+        // ProfileExpirationSettingsView is inverse, since the default state is enabled.
+        #if PROFILE_EXPIRATION_SETTINGS_VIEW_DISABLED
+        self.profileExpirationSettingsViewEnabled = false
+        #else
+        self.profileExpirationSettingsViewEnabled = true
+        #endif
+
+        // Missed meal notifications compiler flag is inverse, since the default state is enabled.
+        #if MISSED_MEAL_NOTIFICATIONS_DISABLED
+        self.missedMealNotifications = false
+        #else
+        self.missedMealNotifications = true
+        #endif
+
+        #if ALLOW_ALGORITHM_EXPERIMENTS
+        self.allowAlgorithmExperiments = true
+        #else
+        self.allowAlgorithmExperiments = false
+        #endif
     }
 }
 
@@ -232,7 +252,7 @@ extension FeatureFlagConfiguration : CustomDebugStringConvertible {
             "* observeHealthKitDoseSamplesFromOtherApps: \(observeHealthKitDoseSamplesFromOtherApps)",
             "* observeHealthKitGlucoseSamplesFromOtherApps: \(observeHealthKitGlucoseSamplesFromOtherApps)",
             "* predictedGlucoseChartClampEnabled: \(predictedGlucoseChartClampEnabled)",
-            "* remoteOverridesEnabled: \(remoteOverridesEnabled)",
+            "* remoteCommandsEnabled: \(remoteCommandsEnabled)",
             "* scenariosEnabled: \(scenariosEnabled)",
             "* sensitivityOverridesEnabled: \(sensitivityOverridesEnabled)",
             "* showEventualBloodGlucoseOnWatchEnabled: \(showEventualBloodGlucoseOnWatchEnabled)",
@@ -243,8 +263,11 @@ extension FeatureFlagConfiguration : CustomDebugStringConvertible {
             "* allowDebugFeatures: \(allowDebugFeatures)",
             "* simpleBolusCalculatorEnabled: \(simpleBolusCalculatorEnabled)",
             "* usePositiveMomentumAndRCForManualBoluses: \(usePositiveMomentumAndRCForManualBoluses)",
-            "* dynamicCarbAbsorptionEnabled: \(dynamicCarbAbsorptionEnabled)",
-            "* adultChildInsulinModelSelectionEnabled: \(adultChildInsulinModelSelectionEnabled)"
+            "* adultChildInsulinModelSelectionEnabled: \(adultChildInsulinModelSelectionEnabled)",
+            "* profileExpirationSettingsViewEnabled: \(profileExpirationSettingsViewEnabled)",
+            "* missedMealNotifications: \(missedMealNotifications)",
+            "* allowAlgorithmExperiments: \(allowAlgorithmExperiments)",
+            "* allowExperimentalFeatures: \(allowExperimentalFeatures)"
         ].joined(separator: "\n")
     }
 }
@@ -262,6 +285,20 @@ extension FeatureFlagConfiguration {
             } else {
                 return false
             }
+        }
+        #else
+        return false
+        #endif
+    }
+    
+    var allowExperimentalFeatures: Bool {
+        #if EXPERIMENTAL_FEATURES_ENABLED
+        return true
+        #elseif EXPERIMENTAL_FEATURES_ENABLED_CONDITIONALLY
+        if debugEnabled {
+            return true
+        } else {
+            return UserDefaults.appGroup?.allowExperimentalFeatures ?? false
         }
         #else
         return false
