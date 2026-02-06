@@ -429,6 +429,32 @@
         }
       }
     },
+    "%@%@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@%2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$@"
+          }
+        }
+      }
+    },
+    "%@U" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@IE"
+          }
+        }
+      }
+    },
     "%1$@ v%2$@" : {
       "comment" : "The format string for the app name and version number. (1: bundle name)(2: bundle version)",
       "localizations" : {
@@ -554,6 +580,26 @@
         }
       }
     },
+    "Color" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbe"
+          }
+        }
+      }
+    },
+    "Date" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datum"
+          }
+        }
+      }
+    },
     "dB" : {
       "comment" : "The short unit display string for decibles",
       "localizations" : {
@@ -669,6 +715,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "dB"
+          }
+        }
+      }
+    },
+    "End" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ende"
           }
         }
       }
@@ -870,6 +926,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "克"
+          }
+        }
+      }
+    },
+    "Glucose level" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blutzuckerspiegel"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "血糖水平"
+          }
+        }
+      }
+    },
+    "Glucose range" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zielbereich"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "血糖范围"
           }
         }
       }
@@ -1194,6 +1282,27 @@
         }
       }
     },
+    "Open the app to update the widget" : {
+      "comment" : "No comment",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffne die App, um das Widget zu aktualisieren"
+          }
+        }
+      }
+    },
+    "Preset override" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voreinstellung"
+          }
+        }
+      }
+    },
     "QUANTITY_VALUE_AND_UNIT" : {
       "comment" : "Format string for combining localized numeric value and unit. (1: numeric value)(2: unit)",
       "extractionState" : "extracted_with_value",
@@ -1392,6 +1501,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "查看您当前的血糖值和胰岛素输注情况。"
+          }
+        }
+      }
+    },
+    "Start" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
           }
         }
       }
