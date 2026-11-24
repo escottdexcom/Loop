@@ -137,6 +137,30 @@
             "value" : "Aktive Kohlenhydrate"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucides actifs"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktive karbohydrater"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actieve koolhydraten"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carbohidrați activi"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -146,7 +170,45 @@
       }
     },
     "Active Carbohydrates (COB)" : {
-      "comment" : "Description for the Carbohydrates On Board selection for the Live Activity configuration"
+      "comment" : "Description for the Carbohydrates On Board selection for the Live Activity configuration",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktive Kohlenhydrate (COB)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucides actifs (COB)"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktive karbohydrater (COB)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actieve koolhydraten (COB)"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carbohidrați activi (COB)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活性碳水 (COB)"
+          }
+        }
+      }
     },
     "Active Carbs" : {
       "comment" : "Name of the \"Active Carbs\" option in the Live Activity settings.",
@@ -157,6 +219,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aktive KH"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucides actifs"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktive karboer"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actieve koolhydraten"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carbohidrați activi"
           }
         },
         "zh-Hans" : {
@@ -178,6 +264,30 @@
             "value" : "Aktives Insulin"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insuline active"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktiv insulin"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actieve insuline"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insulină activă"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -187,10 +297,86 @@
       }
     },
     "Active Insulin (IOB)" : {
-      "comment" : "Description for the Insulin On Board selection for the Live Activity configuration"
+      "comment" : "Description for the Insulin On Board selection for the Live Activity configuration",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktives Insulin (IOB)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insuline active (IOB)"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktiv insulin (IOB)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actieve insuline (IOB)"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insulină activă (IOB)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活性胰岛素(IOB)"
+          }
+        }
+      }
     },
     "at" : {
-      "comment" : "Label used for the Updated time value in the Live Activity view"
+      "comment" : "Label used for the Updated time value in the Live Activity view",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "um"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "à"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kl."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "om"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "la"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 %1$@"
+          }
+        }
+      }
     },
     "Automatic Bolus" : {
       "comment" : "Title string for automatic bolus dosing strategy",
@@ -240,7 +426,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Automatisch Bolussen"
+            "value" : "Automatisch bolussen"
           }
         },
         "pl" : {
@@ -290,6 +476,30 @@
             "value" : "Basal"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basal"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basal"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basaal"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazală"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -299,7 +509,45 @@
       }
     },
     "COB" : {
-      "comment" : "Label used for the Carbohydrates On Board value in the Live Activity view"
+      "comment" : "Label used for the Carbohydrates On Board value in the Live Activity view",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "COB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucides"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "COB"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "COB"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "COB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活性碳水化合物 （COB）"
+          }
+        }
+      }
     },
     "Current BG" : {
       "comment" : "Label not shown in the Live Activity view",
@@ -308,6 +556,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aktueller BZ"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glycémie actuelle"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nåværende BG"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huidige BG"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glicemie curentă"
           }
         },
         "zh-Hans" : {
@@ -329,6 +601,30 @@
             "value" : "Aktueller Blutzucker"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glycémie actuelle"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nåværende glukoseverdi"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huidige glucose"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glicemia curentă"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -338,7 +634,45 @@
       }
     },
     "Current Glucose (Value and Arrow)" : {
-      "comment" : "Description for the Current Glucose selection for the Live Activity configuration"
+      "comment" : "Description for the Current Glucose selection for the Live Activity configuration",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aktueller BZ (Wert und Trend)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glycémie actuelle (valeur et flèche)"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nåværende Glukose (Verdi og Pil)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huidige glucose (waarde en pijl)"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glicemia curentă (Valoare și tendință)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前血糖（数值和箭头）"
+          }
+        }
+      }
     },
     "Delta" : {
       "comment" : "Label used for the Delta Glucose in the Live Activity view",
@@ -348,11 +682,79 @@
             "state" : "translated",
             "value" : "Delta"
           }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delta"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delta"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delta"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delta"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delta (变化值)"
+          }
         }
       }
     },
     "Delta Glucose (Delta)" : {
-      "comment" : "Description for the Delta Glucose selection for the Live Activity configuration"
+      "comment" : "Description for the Delta Glucose selection for the Live Activity configuration",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delta-BZ (Delta)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delta Glucose (Delta)"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delta Glukose (Delta)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucoseverandering (Delta)"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delta glicemie (Delta)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "血糖变化量（Delta）"
+          }
+        }
+      }
     },
     "Eventual BG" : {
       "comment" : "Label used for the Forecasted Glucose in the Live Activity view",
@@ -361,6 +763,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Progn. BZ"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glycémie éventuelle"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eventuell BG"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uiteindelijke BG"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glicemia eventuală"
           }
         },
         "zh-Hans" : {
@@ -382,6 +808,30 @@
             "value" : "Zukünftig"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Éventuellement"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omsider"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eventueel"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "În cele din urmă"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -391,7 +841,45 @@
       }
     },
     "Forecasted Glucose (Eventual BG)" : {
-      "comment" : "Description for the Forecasted Glucose selection for the Live Activity configuration"
+      "comment" : "Description for the Forecasted Glucose selection for the Live Activity configuration",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prognostizierter Glukosewert (Endgültiger Blutzuckerwert)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glycémie prévue (glycémie finale)"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forutsagt glukoseverdi (eventuell BG)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorspelde glucose"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glicemie prognozată (glicemie eventuală)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "预测血糖（最终稳态血糖）"
+          }
+        }
+      }
     },
     "In which mode do you want to render the Live Activity" : {
       "comment" : "Description of a setting that allows the user to choose between a large or small display of the Live Activity.",
@@ -403,6 +891,30 @@
             "value" : "In welchem Modus soll die Live-Aktivität angezeigt werden"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans quel mode voulez-vous afficher les Activités en direct"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I hvilken modus vil du vise Live activity"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In which mode do you want to render the Live Activity"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "În ce mod doriți să redați activitatea live"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -412,7 +924,45 @@
       }
     },
     "IOB" : {
-      "comment" : "Label used for the Insulin On Board value in the Live Activity view"
+      "comment" : "Label used for the Insulin On Board value in the Live Activity view",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IOB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insuline"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IOB"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IAB"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IOB"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活性胰岛素 （IOB）"
+          }
+        }
+      }
     },
     "Large" : {
       "comment" : "Name of the \"Large\" Live Activity mode.",
@@ -425,6 +975,30 @@
             "value" : "Groß"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grand"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stor"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groot"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mare"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -434,13 +1008,127 @@
       }
     },
     "Plot and Row" : {
-      "comment" : "Short name to choose the Lock Screen display including the the plot"
+      "comment" : "Short name to choose the Lock Screen display including the the plot",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagramm und Text"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ligne et graphique"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Felt og rad"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grafiek en rij"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parcelă și rând"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "图表和数据行"
+          }
+        }
+      }
     },
     "Relative Basal Rate (Basal)" : {
-      "comment" : "Description for the Basal Rate plot selection for the Live Activity configuration"
+      "comment" : "Description for the Basal Rate plot selection for the Live Activity configuration",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relative Basalrate (Basal)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Débit basal relatif (Basal)"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Netto basaldose (basal)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relatieve basaalstand"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rată bazală relativă (bazală)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "相对基础率（基础率）"
+          }
+        }
+      }
     },
     "Row Only" : {
-      "comment" : "Short name to choose the Lock Screen display without the plot"
+      "comment" : "Short name to choose the Lock Screen display without the plot",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nur Text"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ligne seule"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kun rad"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alleen rij"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doar rând"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅数据行"
+          }
+        }
+      }
     },
     "Small" : {
       "comment" : "Name of the \"Small\" Live Activity mode.",
@@ -451,6 +1139,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Klein"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Petit"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liten"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klein"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mic"
           }
         },
         "zh-Hans" : {
@@ -509,7 +1221,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alleen Tijdelijk Basaal"
+            "value" : "Alleen tijdelijk basaal"
           }
         },
         "pl" : {
@@ -560,11 +1272,79 @@
             "state" : "translated",
             "value" : "Aktualisiert"
           }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mis à jour"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oppdatert"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bijgewerkt"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizat"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新"
+          }
         }
       }
     },
     "Updated (at)" : {
-      "comment" : "Description for the Updated time selection for the Live Activity configuration"
+      "comment" : "Description for the Updated time selection for the Live Activity configuration",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktualisiert (am)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mis à jour (à)"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oppdatert (sist)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bijgewerkt (op)"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizat (la)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新(更新于)"
+          }
+        }
+      }
     },
     "Updated at" : {
       "comment" : "Label for the date and time when the last update was made.",
@@ -575,6 +1355,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aktualisiert um"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mis à jour à"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oppdatert sist"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bijgewerkt om"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizat la"
           }
         },
         "zh-Hans" : {

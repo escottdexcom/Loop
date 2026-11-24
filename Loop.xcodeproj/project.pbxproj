@@ -104,7 +104,6 @@
 		4328E0351CFC0AE100E199AA /* WatchDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4328E0341CFC0AE100E199AA /* WatchDataManager.swift */; };
 		432CF87520D8AC950066B889 /* NSUserDefaults+WatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4328E0231CFBE2C500E199AA /* NSUserDefaults+WatchApp.swift */; };
 		432E73CB1D24B3D6009AD15D /* RemoteDataServicesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432E73CA1D24B3D6009AD15D /* RemoteDataServicesManager.swift */; };
-		433EA4C41D9F71C800CD78FB /* CommandResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433EA4C31D9F71C800CD78FB /* CommandResponseViewController.swift */; };
 		4344628220A7A37F00C4BE6F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4344628120A7A37E00C4BE6F /* CoreBluetooth.framework */; };
 		4344629220A7C19800C4BE6F /* ButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4344629120A7C19800C4BE6F /* ButtonGroup.swift */; };
 		4344629820A8B2D700C4BE6F /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4374B5EE209D84BE00D17AA8 /* OSLog.swift */; };
@@ -258,6 +257,7 @@
 		84AA81E32A4A36FB000B658B /* SystemActionLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AA81E22A4A36FB000B658B /* SystemActionLink.swift */; };
 		84AA81E52A4A3981000B658B /* DeeplinkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AA81E42A4A3981000B658B /* DeeplinkManager.swift */; };
 		84AA81E72A4A4DEF000B658B /* PumpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AA81E62A4A4DEF000B658B /* PumpView.swift */; };
+		84AB0A833008A62400A13446 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB0A823008A62400A13446 /* SceneDelegate.swift */; };
 		84D2879F2AC756C8007ED283 /* ContentMargin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D2879E2AC756C8007ED283 /* ContentMargin.swift */; };
 		891B508524342BE1005DA578 /* CarbAndBolusFlowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891B508424342BE1005DA578 /* CarbAndBolusFlowViewModel.swift */; };
 		892A5D59222F0A27008961AB /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D58222F0A27008961AB /* Debug.swift */; };
@@ -588,6 +588,7 @@
 		E9C58A7E24DB529A00487A17 /* dynamic_glucose_effect_partially_observed.json in Resources */ = {isa = PBXBuildFile; fileRef = E9C58A7924DB529A00487A17 /* dynamic_glucose_effect_partially_observed.json */; };
 		E9C58A7F24DB529A00487A17 /* counteraction_effect_falling_glucose.json in Resources */ = {isa = PBXBuildFile; fileRef = E9C58A7A24DB529A00487A17 /* counteraction_effect_falling_glucose.json */; };
 		E9C58A8024DB529A00487A17 /* insulin_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E9C58A7B24DB529A00487A17 /* insulin_effect.json */; };
+		FADE0001000000000000DE02 /* DevelopmentBranchAlerter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADE0001000000000000DE01 /* DevelopmentBranchAlerter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -805,7 +806,6 @@
 		1DC63E7325351BDF004605DA /* TrueTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TrueTime.framework; path = Carthage/Build/iOS/TrueTime.framework; sourceTree = "<group>"; };
 		1DE09BA824A3E23F009EE9F9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		1DFE9E162447B6270082C280 /* UserNotificationAlertSchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationAlertSchedulerTests.swift; sourceTree = "<group>"; };
-		3D03C6DA2AACE6AC00FDE5D2 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Intents.strings; sourceTree = "<group>"; };
 		3ED319862EB659E600820BCF /* BasalViewActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalViewActivity.swift; sourceTree = "<group>"; };
 		3ED319872EB659E600820BCF /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		3ED319882EB659E600820BCF /* GlucoseLiveActivityConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseLiveActivityConfiguration.swift; sourceTree = "<group>"; };
@@ -840,7 +840,6 @@
 		4328E0341CFC0AE100E199AA /* WatchDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WatchDataManager.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		432E73CA1D24B3D6009AD15D /* RemoteDataServicesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDataServicesManager.swift; sourceTree = "<group>"; };
 		4337615E1D52F487004A3647 /* GlucoseHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseHUDView.swift; sourceTree = "<group>"; };
-		433EA4C31D9F71C800CD78FB /* CommandResponseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandResponseViewController.swift; sourceTree = "<group>"; };
 		4344628120A7A37E00C4BE6F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/CoreBluetooth.framework; sourceTree = DEVELOPER_DIR; };
 		4344628320A7A3BE00C4BE6F /* LoopKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LoopKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4344628420A7A3BE00C4BE6F /* CGMBLEKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CGMBLEKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1065,6 +1064,7 @@
 		84AA81E22A4A36FB000B658B /* SystemActionLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemActionLink.swift; sourceTree = "<group>"; };
 		84AA81E42A4A3981000B658B /* DeeplinkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkManager.swift; sourceTree = "<group>"; };
 		84AA81E62A4A4DEF000B658B /* PumpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpView.swift; sourceTree = "<group>"; };
+		84AB0A823008A62400A13446 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		84D2879E2AC756C8007ED283 /* ContentMargin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentMargin.swift; sourceTree = "<group>"; };
 		891B508424342BE1005DA578 /* CarbAndBolusFlowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbAndBolusFlowViewModel.swift; sourceTree = "<group>"; };
 		892A5D29222EF60A008961AB /* MockKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = MockKit.framework; path = Carthage/Build/iOS/MockKit.framework; sourceTree = SOURCE_ROOT; };
@@ -1207,6 +1207,10 @@
 		B4E96D5C248A82A2002DABAD /* StatusBarHUDView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StatusBarHUDView.xib; sourceTree = "<group>"; };
 		B4F3D25024AF890C0095CE44 /* BluetoothStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothStateManager.swift; sourceTree = "<group>"; };
 		B4FEEF7C24B8A71F00A8DF9B /* DeviceDataManager+DeviceStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeviceDataManager+DeviceStatus.swift"; sourceTree = "<group>"; };
+		B6656C6C2FB3EE1300FFC8BE /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Intents.strings; sourceTree = "<group>"; };
+		B6656C6D2FB3EE1400FFC8BE /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Main.strings; sourceTree = "<group>"; };
+		B6656C6E2FB3EE1500FFC8BE /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B6656C6F2FB3EE1600FFC8BE /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B66D1F202E6A5D6500471149 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		B66D1F222E6A5D6500471149 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		B66D1F242E6A5D6500471149 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
@@ -1226,7 +1230,6 @@
 		B66D1F3F2E6A5D6600471149 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		B66D1F412E6A5D6600471149 /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = mul.lproj/Interface.xcstrings; sourceTree = "<group>"; };
 		B66D1F422E6A5D6600471149 /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = mul.lproj/Main.xcstrings; sourceTree = "<group>"; };
-		B6F22EF52E95A03600CCA05F /* ce */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ce; path = ce.lproj/Intents.strings; sourceTree = "<group>"; };
 		B6F22EF72E95A03800CCA05F /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Intents.strings; sourceTree = "<group>"; };
 		B6F22EF92E95A03C00CCA05F /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Intents.strings; sourceTree = "<group>"; };
 		C1004DEF2981F5B700B8CF94 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1409,6 +1412,7 @@
 		F5E0BDD827E1D71E0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Main.strings; sourceTree = "<group>"; };
 		F5E0BDDA27E1D71F0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F5E0BDE327E1D7230033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FADE0001000000000000DE01 /* DevelopmentBranchAlerter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentBranchAlerter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1741,6 +1745,7 @@
 				43F5C2CE1B92A2A0003EB13D /* View Controllers */,
 				43F5C2CF1B92A2ED003EB13D /* Views */,
 				897A5A9724C22DCE00C4E71D /* View Models */,
+				84AB0A823008A62400A13446 /* SceneDelegate.swift */,
 			);
 			path = Loop;
 			sourceTree = "<group>";
@@ -1945,7 +1950,6 @@
 			children = (
 				43A51E1E1EB6D62A000736CC /* CarbAbsorptionViewController.swift */,
 				43A51E201EB6DBDD000736CC /* LoopChartsTableViewController.swift */,
-				433EA4C31D9F71C800CD78FB /* CommandResponseViewController.swift */,
 				C178249F1E19CF9800D9D25C /* GlucoseThresholdTableViewController.swift */,
 				4302F4E21D4EA54200F0FCAF /* InsulinDeliveryTableViewController.swift */,
 				437D9BA21D7BC977007245E8 /* PredictionTableViewController.swift */,
@@ -2035,6 +2039,7 @@
 				E9B355232935906B0076AB04 /* Missed Meal Detection */,
 				3ED319902EB65A2D00820BCF /* Live Activity */,
 				C1F2075B26D6F9B0007AB7EB /* AppExpirationAlerter.swift */,
+				FADE0001000000000000DE01 /* DevelopmentBranchAlerter.swift */,
 				A96DAC2B2838F31200D94E38 /* SharedLogging.swift */,
 				7E69CFFB2A16A77E00203CBD /* ResetLoopManager.swift */,
 				84AA81E42A4A3981000B658B /* DeeplinkManager.swift */,
@@ -3033,10 +3038,9 @@
 				ar,
 				sk,
 				cs,
-				hi,
-				ce,
 				hu,
 				uk,
+				ko,
 			);
 			mainGroup = 43776F831B8022E90074EA36;
 			packageReferences = (
@@ -3390,6 +3394,7 @@
 				3ED319992EB65A6900820BCF /* LiveActivityManagementView.swift in Sources */,
 				3ED3199A2EB65A6900820BCF /* LiveActivityBottomRowManagerView.swift in Sources */,
 				C1F2075C26D6F9B0007AB7EB /* AppExpirationAlerter.swift in Sources */,
+				FADE0001000000000000DE02 /* DevelopmentBranchAlerter.swift in Sources */,
 				B4FEEF7D24B8A71F00A8DF9B /* DeviceDataManager+DeviceStatus.swift in Sources */,
 				142CB7592A60BF2E0075748A /* EditMode.swift in Sources */,
 				E95D380324EADF36005E2F50 /* CarbStoreProtocol.swift in Sources */,
@@ -3518,13 +3523,13 @@
 				A9DCF32A25B0FABF00C89088 /* LoopUIColorPalette+Default.swift in Sources */,
 				1DDE273E24AEA4B000796622 /* SettingsView.swift in Sources */,
 				A9B607B0247F000F00792BE4 /* UserNotifications+Loop.swift in Sources */,
+				84AB0A833008A62400A13446 /* SceneDelegate.swift in Sources */,
 				43F89CA322BDFBBD006BB54E /* UIActivityIndicatorView.swift in Sources */,
 				A999D40624663D18004C89D4 /* PumpManagerError.swift in Sources */,
 				437D9BA31D7BC977007245E8 /* PredictionTableViewController.swift in Sources */,
 				A987CD4924A58A0100439ADC /* ZipArchive.swift in Sources */,
 				43F41C371D3BF32400C11ED6 /* UIAlertController.swift in Sources */,
 				A9CBE45C248ACC03008E7BA2 /* SettingsStore+SimulatedCoreData.swift in Sources */,
-				433EA4C41D9F71C800CD78FB /* CommandResponseViewController.swift in Sources */,
 				E9B3552229358C440076AB04 /* MealDetectionManager.swift in Sources */,
 				C16DA84222E8E112008624C2 /* PluginManager.swift in Sources */,
 				43785E932120A01B0057DED1 /* NewCarbEntryIntent+Loop.swift in Sources */,
@@ -3952,10 +3957,9 @@
 				C1C3127F297E4C0400296DA4 /* ar */,
 				C1C247882995823200371B88 /* sk */,
 				C1C5357529C6346A00E32DF9 /* cs */,
-				3D03C6DA2AACE6AC00FDE5D2 /* hi */,
-				B6F22EF52E95A03600CCA05F /* ce */,
 				B6F22EF72E95A03800CCA05F /* hu */,
 				B6F22EF92E95A03C00CCA05F /* uk */,
+				B6656C6C2FB3EE1300FFC8BE /* ko */,
 			);
 			name = Intents.intentdefinition;
 			sourceTree = "<group>";
@@ -3993,6 +3997,7 @@
 				F5D9C01C27DABBE1002E48F6 /* tr */,
 				F5E0BDD827E1D71E0033557E /* he */,
 				C1C3127A297E4BFE00296DA4 /* ar */,
+				B6656C6D2FB3EE1400FFC8BE /* ko */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -4028,6 +4033,7 @@
 				7D9BF14623370E8D005DCFD6 /* ro */,
 				F5D9C02727DABBE4002E48F6 /* tr */,
 				F5E0BDE327E1D7230033557E /* he */,
+				B6656C6F2FB3EE1600FFC8BE /* ko */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4056,6 +4062,7 @@
 				F5E0BDDA27E1D71F0033557E /* he */,
 				C1C3127C297E4BFE00296DA4 /* ar */,
 				C1C247892995823200371B88 /* sk */,
+				B6656C6E2FB3EE1500FFC8BE /* ko */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4272,7 +4279,6 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					NSLocalizedString,
@@ -4293,7 +4299,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				WARNING_CFLAGS = "-Wall";
-				WATCHOS_DEPLOYMENT_TARGET = 7.1;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -4384,7 +4390,6 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					NSLocalizedString,
@@ -4405,7 +4410,7 @@
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				WARNING_CFLAGS = "-Wall";
-				WATCHOS_DEPLOYMENT_TARGET = 7.1;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};
@@ -4490,6 +4495,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "WatchApp Extension/Extensions/WatchApp Extension-Bridging-Header.h";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -4517,6 +4523,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "WatchApp Extension/Extensions/WatchApp Extension-Bridging-Header.h";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};
@@ -4541,6 +4548,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -4565,6 +4573,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};
@@ -4591,6 +4600,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -4617,6 +4627,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};

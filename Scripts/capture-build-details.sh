@@ -101,6 +101,20 @@ then
     popd . > /dev/null
 fi
 
+# --- Customizations ---
+# Each customization adds an empty <identifier>.loopcustomization file at the workspace root or a submodule root.
+customizations_key="com-loopkit-Loop-customizations"
+/usr/libexec/PlistBuddy -c "Delete :${customizations_key}" "${info_plist_path}" 2>/dev/null || true
+/usr/libexec/PlistBuddy -c "Add :${customizations_key} array" "${info_plist_path}"
+if [ -e ../.git ]; then
+    customizations_root=..
+else
+    customizations_root=.
+fi
+find "${customizations_root}" -maxdepth 2 -name '*.loopcustomization' -exec basename {} .loopcustomization \; | sort -u | while read -r identifier; do
+    /usr/libexec/PlistBuddy -c "Add :${customizations_key}: string ${identifier}" "${info_plist_path}"
+done
+
 # --- Root repo details ---
 # Retrieve current branch (or tag) and commit SHA.
 git_branch=$(git symbolic-ref --short -q HEAD || echo "")
@@ -126,6 +140,8 @@ fi
 # Gather submodule details.
 # We use git submodule foreach to output lines in the form:
 #   submodule_name|branch_or_tag|commit_sha
+# Tolerate failures here (e.g. a stale gitlink in the index that is no longer
+# mapped in .gitmodules) so that gathering build metadata never fails the build.
 submodules_info=$(git submodule foreach --quiet '
   sub_git_branch=$(git symbolic-ref --short -q HEAD || echo "")
   sub_git_tag=$(git describe --tags --exact-match 2>/dev/null || echo "")
@@ -135,10 +151,12 @@ submodules_info=$(git submodule foreach --quiet '
     sub_git_branch_or_tag="detached"
   fi
   echo "$name|$sub_git_branch_or_tag|$sub_git_commit_sha"
-')
+' 2>/dev/null) || warn "Unable to fully enumerate submodules for build details"
 
 # For each line, add a dictionary entry for that submodule.
 echo "${submodules_info}" | while IFS="|" read -r submodule_name sub_branch sub_sha; do
+    # Skip empty lines (e.g. when submodule enumeration produced no output)
+    [ -z "${submodule_name}" ] && continue
     # Create a dictionary for this submodule
     /usr/libexec/PlistBuddy -c "Add :${submodules_key}:${submodule_name} dict" "${info_plist_path}"
     /usr/libexec/PlistBuddy -c "Add :${submodules_key}:${submodule_name}:branch string ${sub_branch}" "${info_plist_path}"

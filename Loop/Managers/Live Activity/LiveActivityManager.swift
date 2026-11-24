@@ -103,7 +103,7 @@ class LiveActivityManager : LiveActivityManagerProxy {
             let statusContext = UserDefaults.appGroup?.statusExtensionContext
             let glucoseFormatter = NumberFormatter.glucoseFormatter(for: unit)
             
-            let glucoseSamples = self.getGlucoseSample(unit: unit)
+            let glucoseSamples = await self.getGlucoseSample(unit: unit)
             guard let currentGlucose = glucoseSamples.last else {
                 print("ERROR: No glucose sample found...")
                 return
@@ -118,7 +118,7 @@ class LiveActivityManager : LiveActivityManagerProxy {
                 delta = "\(deltaValue < 0 ? "-" : "+")\(glucoseFormatter.string(from: abs(deltaValue)) ?? "??")"
             }
             
-            let bottomRow = self.getBottomRow(
+            let bottomRow = await self.getBottomRow(
                 currentGlucose: current,
                 delta: delta,
                 statusContext: statusContext,
@@ -143,13 +143,21 @@ class LiveActivityManager : LiveActivityManagerProxy {
             
             var presetContext: Preset? = nil
             if let override = self.loopSettings.preMealOverride ?? self.loopSettings.scheduleOverride, let start = glucoseSamples.first?.startDate {
-                presetContext = Preset(
-                    title: override.getTitle(),
-                    startDate: max(override.startDate, start),
-                    endDate: override.duration.isInfinite ? endDateChart : min(override.actualEndDate, endDateChart),
-                    minValue: override.settings.targetRange?.lowerBound.doubleValue(for: unit) ?? 0,
-                    maxValue: override.settings.targetRange?.upperBound.doubleValue(for: unit) ?? 0
-                )
+                let presetStart = max(override.startDate, start)
+                let presetEnd = override.duration.isInfinite ? endDateChart : min(override.actualEndDate, endDateChart)
+                // Only create a preset if it overlaps the chart window. If the override ended
+                // before the chart window starts (e.g. spacious mode only shows 2h of history),
+                // presetEnd < presetStart and drawing a RectangleMark with those backwards dates
+                // forces SwiftUI Charts to expand the x-axis far into the past.
+                if presetStart <= presetEnd {
+                    presetContext = Preset(
+                        title: override.getTitle(),
+                        startDate: presetStart,
+                        endDate: presetEnd,
+                        minValue: override.settings.targetRange?.lowerBound.doubleValue(for: unit) ?? 0,
+                        maxValue: override.settings.targetRange?.upperBound.doubleValue(for: unit) ?? 0
+                    )
+                }
             }
             
             var glucoseRanges: [GlucoseRangeValue] = []
@@ -157,8 +165,8 @@ class LiveActivityManager : LiveActivityManagerProxy {
                 glucoseRanges = getGlucoseRanges(
                     glucoseRangeSchedule: glucoseRangeSchedule,
                     presetContext: presetContext,
-                    start: start,
-                    end: endDateChart,
+                    start: adjustedChartStart(start),
+                    end: adjustedChartEnd(endDateChart),
                     unit: unit
                 )
             }
@@ -300,55 +308,65 @@ class LiveActivityManager : LiveActivityManagerProxy {
         }
     }
     
-    private func getInsulinOnBoard() -> String {
-        let updateGroup = DispatchGroup()
-        var iob = "??"
-        
-        updateGroup.enter()
-        self.doseStore.insulinOnBoard(at: Date.now) { result in
-            switch (result) {
-            case .failure:
-                break
-            case .success(let iobValue):
-                iob = self.iobFormatter.string(from: iobValue.value) ?? "??"
-                break
+    private func getInsulinOnBoard() async -> String {
+        // NOTE: Do NOT bridge async→sync with DispatchGroup.wait(.distantFuture) here.
+        // update() runs on a Swift Concurrency cooperative-pool thread; blocking that
+        // thread starves the (core-count-sized) pool and can deadlock the whole
+        // concurrency runtime under repeated Live Activity updates. Suspend instead.
+        return await withCheckedContinuation { continuation in
+            self.doseStore.insulinOnBoard(at: Date.now) { result in
+                switch (result) {
+                case .failure:
+                    continuation.resume(returning: "??")
+                case .success(let iobValue):
+                    continuation.resume(returning: self.iobFormatter.string(from: iobValue.value) ?? "??")
+                }
             }
-            
-            updateGroup.leave()
         }
-        
-        _ = updateGroup.wait(timeout: .distantFuture)
-        return iob
     }
-    
-    private func getGlucoseSample(unit: HKUnit) -> [StoredGlucoseSample] {
-        let updateGroup = DispatchGroup()
-        var samples: [StoredGlucoseSample] = []
-        
-        updateGroup.enter()
-        
+
+    private func getGlucoseSample(unit: HKUnit) async -> [StoredGlucoseSample] {
         // When in spacious mode, we want to show the predictive line
         // In compact mode, we only want to show the history
         let timeInterval: TimeInterval = self.settings.addPredictiveLine ? .hours(-2) : .hours(-6)
-        self.glucoseStore.getGlucoseSamples(
-            start: Date.now.addingTimeInterval(timeInterval),
-            end: Date.now
-        ) { result in
-            switch (result) {
-            case .failure:
-                break
-            case .success(let data):
-                samples = data
-                break
+
+        // NOTE: See getInsulinOnBoard() — never block the cooperative pool with a
+        // DispatchGroup.wait here; suspend the async task instead.
+        return await withCheckedContinuation { continuation in
+            self.glucoseStore.getGlucoseSamples(
+                start: adjustedChartStart(Date.now.addingTimeInterval(timeInterval)),
+                end: Date.now
+            ) { result in
+                switch (result) {
+                case .failure:
+                    continuation.resume(returning: [])
+                case .success(let data):
+                    continuation.resume(returning: data)
+                }
             }
-            
-            updateGroup.leave()
         }
-        
-        _ = updateGroup.wait(timeout: .distantFuture)
-        return samples
     }
     
+    // If the chart start falls past the half-hour mark (HH:31–HH:59), pull it back to HH:30
+    // so that the nearest hour label is never truncated at the left edge.
+    private func adjustedChartStart(_ date: Date) -> Date {
+        let calendar = Calendar.current
+        let minute = calendar.component(.minute, from: date)
+        guard minute > 30 else { return date }
+        let startOfHour = calendar.dateInterval(of: .hour, for: date)!.start
+        return startOfHour.addingTimeInterval(.minutes(30))
+    }
+
+    // If the chart end falls before the half-hour mark (HH:00–HH:29), push it forward to HH:30
+    // so that the nearest hour label is never truncated at the right edge.
+    private func adjustedChartEnd(_ date: Date) -> Date {
+        let calendar = Calendar.current
+        let minute = calendar.component(.minute, from: date)
+        guard minute < 30 else { return date }
+        let startOfHour = calendar.dateInterval(of: .hour, for: date)!.start
+        return startOfHour.addingTimeInterval(.minutes(30))
+    }
+
     private func getGlucoseRanges(glucoseRangeSchedule: GlucoseRangeSchedule, presetContext: Preset?, start: Date, end: Date, unit: HKUnit) -> [GlucoseRangeValue] {
         var glucoseRanges: [GlucoseRangeValue] = []
         for item in glucoseRangeSchedule.quantityBetween(start: start, end: end) {
@@ -358,8 +376,9 @@ class LiveActivityManager : LiveActivityManagerProxy {
             let endDate = min(item.endDate, end)
             
             if let presetContext = presetContext {
+                let noTargetRange = presetContext.minValue == 0 && presetContext.maxValue == 0
                 if presetContext.startDate > startDate, presetContext.endDate < endDate {
-                    // A preset is active during this schedule
+                    // Override entirely within this schedule segment
                     glucoseRanges.append(GlucoseRangeValue(
                         id: UUID(),
                         minValue: minValue,
@@ -367,6 +386,16 @@ class LiveActivityManager : LiveActivityManagerProxy {
                         startDate: startDate,
                         endDate: presetContext.startDate
                     ))
+                    if noTargetRange {
+                        glucoseRanges.append(GlucoseRangeValue(
+                            id: UUID(),
+                            minValue: minValue,
+                            maxValue: maxValue,
+                            startDate: presetContext.startDate,
+                            endDate: presetContext.endDate,
+                            isOverride: true
+                        ))
+                    }
                     glucoseRanges.append(GlucoseRangeValue(
                         id: UUID(),
                         minValue: minValue,
@@ -375,7 +404,17 @@ class LiveActivityManager : LiveActivityManagerProxy {
                         endDate: endDate
                     ))
                 } else if presetContext.endDate > startDate, presetContext.endDate < endDate {
-                    // Cut off the start of the glucose target
+                    // Override ends within this segment (started before)
+                    if noTargetRange {
+                        glucoseRanges.append(GlucoseRangeValue(
+                            id: UUID(),
+                            minValue: minValue,
+                            maxValue: maxValue,
+                            startDate: startDate,
+                            endDate: presetContext.endDate,
+                            isOverride: true
+                        ))
+                    }
                     glucoseRanges.append(GlucoseRangeValue(
                         id: UUID(),
                         minValue: minValue,
@@ -384,7 +423,7 @@ class LiveActivityManager : LiveActivityManagerProxy {
                         endDate: endDate
                     ))
                 } else if presetContext.startDate < endDate, presetContext.startDate > startDate {
-                    // Cut off the end of the glucose target
+                    // Override starts within this segment (ends after)
                     glucoseRanges.append(GlucoseRangeValue(
                         id: UUID(),
                         minValue: minValue,
@@ -392,8 +431,30 @@ class LiveActivityManager : LiveActivityManagerProxy {
                         startDate: startDate,
                         endDate: presetContext.startDate
                     ))
+                    if noTargetRange {
+                        glucoseRanges.append(GlucoseRangeValue(
+                            id: UUID(),
+                            minValue: minValue,
+                            maxValue: maxValue,
+                            startDate: presetContext.startDate,
+                            endDate: endDate,
+                            isOverride: true
+                        ))
+                    }
                     if presetContext.endDate == end {
                         break
+                    }
+                } else if presetContext.startDate <= startDate, presetContext.endDate >= endDate {
+                    // Override completely covers this segment
+                    if noTargetRange {
+                        glucoseRanges.append(GlucoseRangeValue(
+                            id: UUID(),
+                            minValue: minValue,
+                            maxValue: maxValue,
+                            startDate: startDate,
+                            endDate: endDate,
+                            isOverride: true
+                        ))
                     }
                 } else {
                     // No overlap with target and override
@@ -419,43 +480,45 @@ class LiveActivityManager : LiveActivityManagerProxy {
         return glucoseRanges
     }
     
-    private func getBottomRow(currentGlucose: Double, delta: String, statusContext: StatusExtensionContext?, glucoseFormatter: NumberFormatter) -> [BottomRowItem] {
-        return self.settings.bottomRowConfiguration.map { type in
+    private func getBottomRow(currentGlucose: Double, delta: String, statusContext: StatusExtensionContext?, glucoseFormatter: NumberFormatter) async -> [BottomRowItem] {
+        var items: [BottomRowItem] = []
+        for type in self.settings.bottomRowConfiguration {
             switch(type) {
             case .iob:
-                return BottomRowItem.generic(label: type.name(), value: getInsulinOnBoard(), unit: "U")
-                
+                items.append(BottomRowItem.generic(label: type.name(), value: await getInsulinOnBoard(), unit: "U"))
+
             case .cob:
                 var cob: String = "0"
                 if let cobValue = statusContext?.carbsOnBoard {
                     cob = self.cobFormatter.string(from: cobValue) ?? "??"
                 }
-                return BottomRowItem.generic(label: type.name(), value: cob, unit: "g")
-                
+                items.append(BottomRowItem.generic(label: type.name(), value: cob, unit: "g"))
+
             case .basal:
                 guard let netBasalContext = statusContext?.netBasal else {
-                    return BottomRowItem.basal(rate: 0, percentage: 0)
+                    items.append(BottomRowItem.basal(rate: 0, percentage: 0))
+                    continue
                 }
+                items.append(BottomRowItem.basal(rate: netBasalContext.rate, percentage: netBasalContext.percentage))
 
-                return BottomRowItem.basal(rate: netBasalContext.rate, percentage: netBasalContext.percentage)
-                
             case .currentBg:
-                return BottomRowItem.currentBg(label: type.name(), value: "\(glucoseFormatter.string(from: currentGlucose) ?? "??")", trend: statusContext?.glucoseDisplay?.trendType)
-                
+                items.append(BottomRowItem.currentBg(label: type.name(), value: "\(glucoseFormatter.string(from: currentGlucose) ?? "??")", trend: statusContext?.glucoseDisplay?.trendType))
+
             case .eventualBg:
                 guard let eventual = statusContext?.predictedGlucose?.values.last else {
-                    return BottomRowItem.generic(label: type.name(), value: "??", unit: "")
+                    items.append(BottomRowItem.generic(label: type.name(), value: "??", unit: ""))
+                    continue
                 }
-                
-                return BottomRowItem.generic(label: type.name(), value: glucoseFormatter.string(from: eventual) ?? "??", unit: "")
-                
+                items.append(BottomRowItem.generic(label: type.name(), value: glucoseFormatter.string(from: eventual) ?? "??", unit: ""))
+
             case .deltaBg:
-                return BottomRowItem.generic(label: type.name(), value: delta, unit: "")
-                
+                items.append(BottomRowItem.generic(label: type.name(), value: delta, unit: ""))
+
             case .updatedAt:
-                return BottomRowItem.generic(label: type.name(), value: timeFormatter.string(from: Date.now), unit: "")
+                items.append(BottomRowItem.generic(label: type.name(), value: timeFormatter.string(from: Date.now), unit: ""))
             }
-       }
+        }
+        return items
     }
     
     private func initEmptyActivity(settings: LiveActivitySettings) {

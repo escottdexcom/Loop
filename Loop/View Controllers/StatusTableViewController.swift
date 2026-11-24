@@ -140,7 +140,7 @@ final class StatusTableViewController: LoopChartsTableViewController {
         tableView.estimatedRowHeight = 74
 
         // Estimate an initial value
-        landscapeMode = UIScreen.main.bounds.size.width > UIScreen.main.bounds.size.height
+        landscapeMode = Self.isCompactHeight
 
         addScenarioStepGestureRecognizers()
 
@@ -210,6 +210,11 @@ final class StatusTableViewController: LoopChartsTableViewController {
         }
     }
 
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        updateTopContentInset()
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         refreshContext.update(with: .size(size))
 
@@ -273,41 +278,71 @@ final class StatusTableViewController: LoopChartsTableViewController {
         deviceManager.pumpManagerHUDProvider?.visible = active && onscreen
     }
 
-    private func setupToolbarItems() {
-        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let carbs = UIBarButtonItem(image: UIImage(named: "carbs"), style: .plain, target: self, action: #selector(userTappedAddCarbs))
-        let bolus = UIBarButtonItem(image: UIImage(named: "bolus"), style: .plain, target: self, action: #selector(presentBolusScreen))
-        let settings = UIBarButtonItem(image: UIImage(named: "settings"), style: .plain, target: self, action: #selector(onSettingsTapped))
-        
-        let preMeal = createPreMealButtonItem(selected: false, isEnabled: true)
-        let workout = createWorkoutButtonItem(selected: false, isEnabled: true)
-        toolbarItems = [
-            carbs,
-            space,
-            preMeal,
-            space,
-            bolus,
-            space,
-            workout,
-            space,
-            settings
-        ]
+    private lazy var carbsItem = makeToolbarItem(title: NSLocalizedString("Add Meal", comment: "The label of the carb entry button"), image: UIImage(named: "carbs"), tintColor: .carbTintColor, action: #selector(userTappedAddCarbs))
+    private lazy var bolusItem = makeToolbarItem(title: NSLocalizedString("Bolus", comment: "The label of the bolus entry button"), image: UIImage(named: "bolus"), tintColor: .insulinTintColor, action: #selector(presentBolusScreen))
+    private lazy var settingsItem = makeToolbarItem(title: NSLocalizedString("Settings", comment: "The label of the settings button"), image: UIImage(named: "settings"), tintColor: .secondaryLabel, action: #selector(onSettingsTapped))
+    private lazy var preMealItem = makeToolbarItem(title: NSLocalizedString("Pre-Meal Targets", comment: "The label of the pre-meal mode toggle button"), image: UIImage.preMealImage(selected: false), tintColor: .carbTintColor, action: #selector(premealButtonTapped(_:)))
+    private lazy var workoutItem = makeToolbarItem(title: NSLocalizedString("Workout Targets", comment: "The label of the workout mode toggle button"), image: UIImage.workoutImage(selected: false), tintColor: .glucoseTintColor, action: #selector(toggleWorkoutMode(_:)))
+
+    private func makeToolbarItem(title: String, image: UIImage?, tintColor: UIColor, action: Selector) -> UIBarButtonItem {
+        let item = UIBarButtonItem(image: image, style: .plain, target: self, action: action)
+        item.title = title
+        item.tintColor = tintColor
+        return item
     }
-        
+
+    private func setupToolbarItems() {
+        func flexibleSpace() -> UIBarButtonItem {
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        }
+
+        if #available(iOS 26, *) {
+            toolbarItems = [carbsItem, preMealItem, bolusItem, workoutItem, settingsItem]
+        } else {
+            toolbarItems = [
+                carbsItem,
+                flexibleSpace(),
+                preMealItem,
+                flexibleSpace(),
+                bolusItem,
+                flexibleSpace(),
+                workoutItem,
+                flexibleSpace(),
+                settingsItem
+            ]
+        }
+#if compiler(>=6.4)
+        if #available(iOS 27, *) {
+            for item in [carbsItem, preMealItem, bolusItem, workoutItem, settingsItem] {
+                item.isPaddingRemoved = true
+            }
+            settingsItem.visibilityPriority = .high
+        }
+#endif
+    }
+
     private func updateToolbarItems() {
         let isPumpOnboarded = onboardingManager.isComplete || deviceManager.pumpManager?.isOnboarded == true
 
-        toolbarItems![0].accessibilityLabel = NSLocalizedString("Add Meal", comment: "The label of the carb entry button")
-        toolbarItems![0].isEnabled = isPumpOnboarded
-        toolbarItems![0].tintColor = UIColor.carbTintColor
-        toolbarItems![4].accessibilityLabel = NSLocalizedString("Bolus", comment: "The label of the bolus entry button")
-        toolbarItems![4].isEnabled = isPumpOnboarded
-        toolbarItems![4].tintColor = UIColor.insulinTintColor
-        toolbarItems![8].accessibilityLabel = NSLocalizedString("Settings", comment: "The label of the settings button")
-        toolbarItems![8].tintColor = UIColor.secondaryLabel
-        
-        toolbarItems![2] = createPreMealButtonItem(selected: preMealMode == true && preMealModeAllowed, isEnabled: preMealModeAllowed)
-        toolbarItems![6] = createWorkoutButtonItem(selected: workoutMode == true && workoutModeAllowed, isEnabled: workoutModeAllowed)
+        carbsItem.isEnabled = isPumpOnboarded
+        bolusItem.isEnabled = isPumpOnboarded
+
+        let preMealSelected = preMealMode == true && preMealModeAllowed
+        updateToggleItem(preMealItem, image: UIImage.preMealImage(selected: preMealSelected), selected: preMealSelected, isEnabled: preMealModeAllowed)
+        let workoutSelected = workoutMode == true && workoutModeAllowed
+        updateToggleItem(workoutItem, image: UIImage.workoutImage(selected: workoutSelected), selected: workoutSelected, isEnabled: workoutModeAllowed)
+    }
+
+    private func updateToggleItem(_ item: UIBarButtonItem, image: UIImage?, selected: Bool, isEnabled: Bool) {
+        item.image = image
+        item.isEnabled = isEnabled
+        if selected {
+            item.accessibilityTraits.insert(.selected)
+            item.accessibilityHint = NSLocalizedString("Disables", comment: "The action hint of the workout mode toggle button when enabled")
+        } else {
+            item.accessibilityTraits.remove(.selected)
+            item.accessibilityHint = NSLocalizedString("Enables", comment: "The action hint of the workout mode toggle button when disabled")
+        }
     }
 
     public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState? = nil {
@@ -320,8 +355,22 @@ final class StatusTableViewController: LoopChartsTableViewController {
         }
     }
 
-    // Toggles the display mode based on the screen aspect ratio. Should not be updated outside of reloadData().
+    // Charts only, for compact height (an iPhone in landscape). Should not be updated outside of reloadData().
     private var landscapeMode = false
+
+    private static var isCompactHeight: Bool {
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        let scene = scenes.first { $0.windows.contains { $0.isKeyWindow } }
+            ?? scenes.first { $0.activationState == .foregroundActive }
+            ?? scenes.first
+        return scene?.traitCollection.verticalSizeClass == .compact
+    }
+
+    // With a vertical status bar there is no top safe area inset, so keep the first row clear of the display corners.
+    private var cornerClearanceTopInset: CGFloat {
+        guard #available(iOS 26.0, *), let window = view.window else { return 0 }
+        return max(0, window.edgeInsets(for: .safeArea(cornerAdaptation: .vertical)).top - window.safeAreaInsets.top)
+    }
 
     private var lastLoopError: Error?
 
@@ -331,6 +380,16 @@ final class StatusTableViewController: LoopChartsTableViewController {
 
     private var shouldShowHUD: Bool {
         return !landscapeMode
+    }
+
+    private func updateTopContentInset() {
+        let top = shouldShowBannerWarning ? 0 : cornerClearanceTopInset
+        guard tableView.contentInset.top != top else { return }
+        let wasAtTop = tableView.contentOffset.y <= -tableView.adjustedContentInset.top
+        tableView.contentInset.top = top
+        if wasAtTop {
+            tableView.contentOffset.y = -tableView.adjustedContentInset.top
+        }
     }
 
     private var shouldShowStatus: Bool {
@@ -762,6 +821,7 @@ final class StatusTableViewController: LoopChartsTableViewController {
         } else {
             tableView.reloadRows(at: [IndexPath(row: 0, section: Section.alertWarning.rawValue)], with: .none)
         }
+        updateTopContentInset()
     }
 
     private func updateBannerAndHUDandStatusRows(statusRowMode: StatusRowMode, newSize: CGSize?, animated: Bool) {
@@ -772,8 +832,8 @@ final class StatusTableViewController: LoopChartsTableViewController {
 
         self.statusRowMode = statusRowMode
 
-        if let newSize = newSize {
-            landscapeMode = newSize.width > newSize.height
+        if newSize != nil {
+            landscapeMode = traitCollection.verticalSizeClass == .compact
         }
 
         let hudIsVisible = self.shouldShowHUD
@@ -893,6 +953,8 @@ final class StatusTableViewController: LoopChartsTableViewController {
     }
 
     private class AlertPermissionsDisabledWarningCell: UITableViewCell {
+        var fullBleedTopInset: CGFloat?
+
         override func updateConfiguration(using state: UICellConfigurationState) {
             super.updateConfiguration(using: state)
 
@@ -918,18 +980,22 @@ final class StatusTableViewController: LoopChartsTableViewController {
             backgroundConfiguration = backgroundConfig
             backgroundConfiguration?.backgroundInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 10)
             backgroundConfiguration?.cornerRadius = 10
+            if fullBleedTopInset != nil {
+                applyFullBleedBackground()
+            }
 
             let disclosureIndicator = UIImage(systemName: "chevron.right")?.withTintColor(.white)
             let imageView = UIImageView(image: disclosureIndicator)
             imageView.tintColor = .white
             accessoryView = imageView
 
-            contentView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 6, leading: 0, bottom: 13, trailing: 0)
+            contentView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: (fullBleedTopInset ?? 0) + 6, leading: 0, bottom: 13, trailing: 0)
         }
     }
 
     private class MuteAlertsWarningCell: UITableViewCell {
         var formattedAlertMuteEndTime: String = NSLocalizedString("Unknown", comment: "label for when the alert mute end time is unknown")
+        var fullBleedTopInset: CGFloat?
 
         fileprivate class GradientView: UIView {
             override static var layerClass: AnyClass { CAGradientLayer.self }
@@ -962,6 +1028,9 @@ final class StatusTableViewController: LoopChartsTableViewController {
             backgroundConfiguration = backgroundConfig
             backgroundConfiguration?.backgroundInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 5, trailing: 5)
             backgroundConfiguration?.cornerRadius = 10
+            if fullBleedTopInset != nil {
+                applyFullBleedBackground()
+            }
 
             let unmuteIndicator = UIImage(systemName: "stop.circle")?.withTintColor(.white)
             let imageView = UIImageView(image: unmuteIndicator)
@@ -969,19 +1038,22 @@ final class StatusTableViewController: LoopChartsTableViewController {
             imageView.frame.size = CGSize(width: 30, height: 30)
             accessoryView = imageView
 
-            contentView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 6, leading: 0, bottom: 13, trailing: 0)
+            contentView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: (fullBleedTopInset ?? 0) + 6, leading: 0, bottom: 13, trailing: 0)
         }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch Section(rawValue: indexPath.section)! {
         case .alertWarning:
+            let fullBleedTopInset: CGFloat? = cornerClearanceTopInset > 0 ? cornerClearanceTopInset : nil
             if alertPermissionsChecker.showWarning {
                 let cell = tableView.dequeueReusableCell(withIdentifier: AlertPermissionsDisabledWarningCell.className, for: indexPath) as! AlertPermissionsDisabledWarningCell
+                cell.fullBleedTopInset = fullBleedTopInset
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: MuteAlertsWarningCell.className, for: indexPath) as! MuteAlertsWarningCell
                 cell.formattedAlertMuteEndTime = alertMuter.formattedEndTime
+                cell.fullBleedTopInset = fullBleedTopInset
                 cell.selectionStyle = .none
                 return cell
             }
@@ -1189,8 +1261,8 @@ final class StatusTableViewController: LoopChartsTableViewController {
         case .charts:
             // Compute the height of the HUD, defaulting to 70
             let hudHeight = ceil(hudView?.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height ?? 74)
-            var availableSize = max(tableView.bounds.width, tableView.bounds.height)
-            availableSize -= (tableView.safeAreaInsets.top + tableView.safeAreaInsets.bottom + hudHeight)
+            var availableSize = landscapeMode ? max(tableView.bounds.width, tableView.bounds.height) : tableView.bounds.height
+            availableSize -= (tableView.safeAreaInsets.top + tableView.safeAreaInsets.bottom + tableView.contentInset.top + hudHeight)
 
             switch ChartRow(rawValue: indexPath.row)! {
             case .glucose:
@@ -1378,7 +1450,7 @@ final class StatusTableViewController: LoopChartsTableViewController {
             let bolusEntryView = SimpleBolusView(viewModel: viewModel).environmentObject(deviceManager.displayGlucosePreference)
             let hostingController = DismissibleHostingController(rootView: bolusEntryView, isModalInPresentation: false)
             navigationWrapper = UINavigationController(rootViewController: hostingController)
-            hostingController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: navigationWrapper, action: #selector(dismissWithAnimation))
+            hostingController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: navigationWrapper, action: #selector(dismissWithAnimation))
             present(navigationWrapper, animated: true)
         } else {
             let viewModel = CarbEntryViewModel(delegate: deviceManager)
@@ -1437,43 +1509,9 @@ final class StatusTableViewController: LoopChartsTableViewController {
         )
         
         let navigationWrapper = UINavigationController(rootViewController: hostingController)
-        hostingController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: navigationWrapper, action: #selector(dismissWithAnimation))
+        hostingController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: ""), style: .plain, target: navigationWrapper, action: #selector(dismissWithAnimation))
         present(navigationWrapper, animated: true)
         deviceManager.analyticsServicesManager.didDisplayBolusScreen()
-    }
-
-    private func createPreMealButtonItem(selected: Bool, isEnabled: Bool) -> UIBarButtonItem {
-        let item = UIBarButtonItem(image: UIImage.preMealImage(selected: selected), style: .plain, target: self, action: #selector(premealButtonTapped(_:)))
-        item.accessibilityLabel = NSLocalizedString("Pre-Meal Targets", comment: "The label of the pre-meal mode toggle button")
-
-        if selected {
-            item.accessibilityTraits.insert(.selected)
-            item.accessibilityHint = NSLocalizedString("Disables", comment: "The action hint of the workout mode toggle button when enabled")
-        } else {
-            item.accessibilityHint = NSLocalizedString("Enables", comment: "The action hint of the workout mode toggle button when disabled")
-        }
-
-        item.tintColor = UIColor.carbTintColor
-        item.isEnabled = isEnabled
-
-        return item
-    }
-    
-    private func createWorkoutButtonItem(selected: Bool, isEnabled: Bool) -> UIBarButtonItem {
-        let item = UIBarButtonItem(image: UIImage.workoutImage(selected: selected), style: .plain, target: self, action: #selector(toggleWorkoutMode(_:)))
-        item.accessibilityLabel = NSLocalizedString("Workout Targets", comment: "The label of the workout mode toggle button")
-
-        if selected {
-            item.accessibilityTraits.insert(.selected)
-            item.accessibilityHint = NSLocalizedString("Disables", comment: "The action hint of the workout mode toggle button when enabled")
-        } else {
-            item.accessibilityHint = NSLocalizedString("Enables", comment: "The action hint of the workout mode toggle button when disabled")
-        }
-
-        item.tintColor = UIColor.glucoseTintColor
-        item.isEnabled = isEnabled
-
-        return item
     }
 
     @IBAction func premealButtonTapped(_ sender: UIBarButtonItem) {
@@ -1544,7 +1582,7 @@ final class StatusTableViewController: LoopChartsTableViewController {
             }
         } else {
             if FeatureFlags.sensitivityOverridesEnabled {
-                performSegue(withIdentifier: OverrideSelectionViewController.className, sender: toolbarItems![6])
+                performSegue(withIdentifier: OverrideSelectionViewController.className, sender: workoutItem)
             } else {
                 presentWorkoutModeAlertController()
             }
@@ -1585,6 +1623,7 @@ final class StatusTableViewController: LoopChartsTableViewController {
     }
 
     private func presentSettings() {
+        deviceManager.analyticsServicesManager.didDisplaySettingsScreen()
         let deletePumpDataFunc: () -> PumpManagerViewModel.DeleteTestingDataFunc? = { [weak self] in
             (self?.deviceManager.pumpManager is TestingPumpManager) ? {
                 [weak self] in self?.deviceManager.deleteTestingPumpData()
@@ -1631,7 +1670,6 @@ final class StatusTableViewController: LoopChartsTableViewController {
                                           pumpManagerSettingsViewModel: pumpViewModel,
                                           cgmManagerSettingsViewModel: cgmViewModel,
                                           servicesViewModel: servicesViewModel,
-                                          criticalEventLogExportViewModel: CriticalEventLogExportViewModel(exporterFactory: deviceManager.criticalEventLogExportManager),
                                           therapySettings: { [weak self] in self?.deviceManager.loopManager.therapySettings ?? TherapySettings() },
                                           sensitivityOverridesEnabled: FeatureFlags.sensitivityOverridesEnabled,
                                           initialDosingEnabled: deviceManager.loopManager.settings.dosingEnabled,
@@ -1781,15 +1819,15 @@ final class StatusTableViewController: LoopChartsTableViewController {
 
     @objc private func pumpStatusTapped(_ sender: UIGestureRecognizer) {
         if let pumpStatusView = sender.view as? PumpStatusHUDView {
-            executeHUDTapAction(deviceManager.didTapOnPumpStatus(pumpStatusView.pumpManagerProvidedHUD))
+            executeHUDTapAction(deviceManager.didTapOnPumpStatus(pumpStatusView.pumpManagerProvidedHUD), from: sender.view)
         }
     }
 
     @objc private func cgmStatusTapped( _ sender: UIGestureRecognizer) {
-        executeHUDTapAction(deviceManager.didTapOnCGMStatus())
+        executeHUDTapAction(deviceManager.didTapOnCGMStatus(), from: sender.view)
     }
 
-    private func executeHUDTapAction(_ action: HUDTapAction?) {
+    private func executeHUDTapAction(_ action: HUDTapAction?, from sourceView: UIView?) {
         guard let action = action else {
             return
         }
@@ -1802,15 +1840,15 @@ final class StatusTableViewController: LoopChartsTableViewController {
         case .openAppURL(let url):
             UIApplication.shared.open(url)
         case .setupNewCGM:
-            addNewCGMManager()
+            addNewCGMManager(from: sourceView)
         case .setupNewPump:
-            addNewPumpManager()
+            addNewPumpManager(from: sourceView)
         default:
             return
         }
     }
 
-    private func addNewPumpManager() {
+    private func addNewPumpManager(from sourceView: UIView?) {
         let availablePumpManagers = deviceManager.availablePumpManagers
 
         switch availablePumpManagers.count {
@@ -1822,12 +1860,13 @@ final class StatusTableViewController: LoopChartsTableViewController {
             let alert = UIAlertController(availablePumpManagers: availablePumpManagers) { [weak self] (identifier) in
                 self?.addPumpManager(withIdentifier: identifier)
             }
-            alert.addCancelAction { _ in }
+            alert.popoverPresentationController?.sourceView = sourceView ?? view
+            alert.popoverPresentationController?.sourceRect = sourceView?.bounds ?? view.bounds
             present(alert, animated: true, completion: nil)
         }
     }
 
-    private func addNewCGMManager() {
+    private func addNewCGMManager(from sourceView: UIView?) {
         let availableCGMManagers = deviceManager.availableCGMManagers
 
         switch availableCGMManagers.count {
@@ -1839,7 +1878,8 @@ final class StatusTableViewController: LoopChartsTableViewController {
             let alert = UIAlertController(availableCGMManagers: availableCGMManagers) { [weak self] identifier in
                 self?.addCGMManager(withIdentifier: identifier)
             }
-            alert.addCancelAction { _ in }
+            alert.popoverPresentationController?.sourceView = sourceView ?? view
+            alert.popoverPresentationController?.sourceRect = sourceView?.bounds ?? view.bounds
             present(alert, animated: true, completion: nil)
         }
     }
@@ -2225,16 +2265,6 @@ extension StatusTableViewController: SettingsViewModelDelegate {
             settings.automaticDosingStrategy = strategy
         }
     }
-
-    func didTapIssueReport() {
-        // TODO: this dismiss here is temporary, until we know exactly where
-        // we want this screen to belong in the navigation flow
-        dismiss(animated: true) {
-            let vc = CommandResponseViewController.generateDiagnosticReport(deviceManager: self.deviceManager)
-            vc.title = NSLocalizedString("Issue Report", comment: "The view controller title for the issue report screen")
-            self.show(vc, sender: nil)
-        }
-    }
 }
 
 // MARK: - Services delegation
@@ -2268,5 +2298,13 @@ extension StatusTableViewController: ServicesViewModelDelegate {
         settingsViewController.serviceOnboardingDelegate = deviceManager.servicesManager
         settingsViewController.completionDelegate = self
         show(settingsViewController, sender: self)
+    }
+}
+
+private extension UITableViewCell {
+    // Without a top status bar, the banner runs to the top edge and the display corners round it.
+    func applyFullBleedBackground() {
+        backgroundConfiguration?.backgroundInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0)
+        backgroundConfiguration?.cornerRadius = 0
     }
 }
